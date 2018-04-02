@@ -1,0 +1,126 @@
+
+#qebar, #qenav, .links, .slideshow, .slideshow1, #carousel0, .product-filter, .priceview-add, .share, .tab-related, .noview, #noview .box.statistica, #just-purchased, #callme_button, #abuses, .abuses-view, #tab-attribute {
+	display:none;
+}
+
+#rh-badge {
+	display:none;
+	max-width:0px;
+}
+
+#header .inf {
+	position: absolute;
+	top: 45px;
+	right: 5px;
+	height: 102px;
+	width: 350px;
+	background: url('../image/header4.png') no-repeat;
+	float:right;
+}
+
+
+#column-left {
+	display:none;
+	float: left;
+	width: 205px;
+	padding-left: 10px;
+}
+#column-right {
+	display:none;
+	float: right;
+	width: 195px;
+	padding-right: 10px;
+}
+#content {
+	min-height: 400px;
+	margin-bottom: 25px;
+	
+	
+}
+#content > p, table, .category-inf, h3, h2 {
+	padding-left:5px;
+	padding-right:5px;
+}
+
+/* content */
+#content .content {
+	padding: 10px;
+	overflow: auto;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	
+}
+#content .content .left {
+	float: left;
+	width: 100%;
+}
+#content .content .right {
+	float: right;
+	width: 100%;
+}
+#column-left + #column-right + #content, #column-left + #content {
+	margin-left: 0px;
+}
+#column-right + #content {
+	margin-right: 0px;
+}
+
+
+#header {
+	height: 160px;
+	display: block;
+    max-width: 100%;
+    margin: 0 auto;
+	background-color: none;
+	position: relative;
+	z-index: 99;
+	text-align:center;
+
+}
+#logo {
+	background:url('../image/logo2.png') no-repeat;
+
+	width:252px;
+	height:120px;
+	z-index: 99;
+	top: 45px;
+	text-align: center;
+}
+#language {
+	position: absolute;
+	top: 59px;
+	left: 360px;
+	width: 108px;
+	color: #859971;
+	line-height: 17px;
+}
+
+.breadcrumb a {
+color:#fff;
+font-weight:bold;
+}
+
+@media (max-width: 660px) {
+	
+	
+#header .inf {
+	top: 165px;
+	left: 5px;
+	height: 50px;
+	width: 319px;
+	background: url('../image/header5.png') no-repeat;
+
+}
+	#footer {
+	clear: both;
+	overflow: auto;
+	min-height: 200px;
+	padding-top:10px;
+	padding-left:70px;
+	position: relative;
+	background-image: url('../image/m-footer.jpg');
+	border-radius: 0px 0px 15px 15px;
+	margin-bottom:20px;
+	text-align: center;
+}
+}

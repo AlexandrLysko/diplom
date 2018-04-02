@@ -1,0 +1,157 @@
+﻿<modification>
+	<id>OpenCart 1.5.x MyModul_Files</id>
+	<version>1.0</version>
+	<vqmver>2.5.1</vqmver>
+	<author>Alexandr Lysko</author>
+
+<!--admin/view/template/catalog/product_form.tpl-->
+<!--admin/controller/catalog/product.php-->
+<!--admin/controller/catalog/download.php-->
+<!--admin/model/catalog/product.php-->
+
+<!--catalog/view/theme/target/template/product/product.tpl-->
+<!--catalog/controller/product/product.php-->
+<!--catalog/model/catalog/product.php-->
+
+
+<!--Поле добавления файлов-->	
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation>
+			<search position="before"><![CDATA[<td><?php echo $entry_description; ?></td>]]>
+			</search>
+			<add><![CDATA[<td>Файлы для скачивания:</td>
+					<td><input type="text" name="sert" value="<?php echo $sert; ?>" /> <a id="button-upload-sert" class="button">Обзор</a></td>
+				</tr>
+				<tr>]]>
+			</add>
+		</operation>
+			
+<!--JS скрипт объект json -->
+		<operation>
+			<search position="before"><![CDATA[<?php echo $footer; ?>]]>
+			</search>
+			<add><![CDATA[<script type="text/javascript" src="view/javascript/jquery/ajaxupload.js"></script>
+<script type="text/javascript"><!--
+	new AjaxUpload('#button-upload-sert', {
+		action: 'index.php?route=catalog/download/upload_sert&token=<?php echo $token; ?>',
+		name: 'file',
+		autoSubmit: true,
+		responseType: 'json',
+		onSubmit: function(file, extension) {
+			$('#button-upload-sert').after('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+			$('#button-upload-sert').attr('disabled', true);
+		},
+		onComplete: function(file, json) {
+			$('#button-upload').attr('disabled', false);
+			if (json['success']) {
+			alert(json['success']);
+			$('input[name="sert"]').attr('value', json['sert']);
+			}
+			if (json['error']) {
+			alert(json['error']);
+			}
+			$('.loading').remove();
+		}
+	});
+//--></script>]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file name="admin/controller/catalog/product.php">
+		<operation>
+			<search position="after"><![CDATA[$this->data['entry_jan'] = $this->language->get('entry_jan');]]>
+			</search>
+			<add><![CDATA[$this->data['entry_sert'] = $this->language->get('entry_sert');]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[if (isset($this->request->post['isbn'])) {]]>
+			</search>
+			<add><![CDATA[if (isset($this->request->post['sert'])) {
+      		$this->data['sert'] = $this->request->post['sert'];
+    	} elseif (!empty($product_info)) {
+			$this->data['sert'] = $product_info['sert'];
+		} else {
+      		$this->data['sert'] = '';
+    	}]]>
+			</add>
+		</operation>
+	</file>
+			
+	<!--Загружаем файл на сервер в папку download и преобразуем имя файла в транслит, при этом заменяя пробелы и другие спецсимволы.-->
+	
+	<file name="admin/controller/catalog/download.php">
+		<operation>
+			<search position="before"><![CDATA[public function index() {]]>
+			</search>
+			<add><![CDATA[public function transform($string){
+	$arr = array( 'А' => 'A' , 'Б' => 'B' , 'В' => 'V' , 'Г' => 'G', 'Д' => 'D' , 'Е' => 'E' , 'Ё' => 'JO' , 'Ж' => 'ZH', 'З' => 'Z' , 'И' => 'I' , 'Й' => 'JJ' , 'К' => 'K', 'Л' => 'L' , 'М' => 'M' , 'Н' => 'N' , 'О' => 'O', 'П' => 'P' , 'Р' => 'R' , 'С' => 'S' , 'Т' => 'T', 'У' => 'U' , 'Ф' => 'F' , 'Х' => 'KH' , 'Ц' => 'C', 'Ч' => 'CH', 'Ш' => 'SH', 'Щ' => 'SHH', 'Ъ' => '"', 'Ы' => 'Y' , 'Ь' => '', 'Э' => 'EH' , 'Ю' => 'JU', 'Я' => 'JA', 'а' => 'a' , 'б' => 'b' , 'в' => 'v' , 'г' => 'g', 'д' => 'd', 'е' => 'e' , 'ё' => 'jo' , 'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'jj', 'к' => 'k' , 'л' => 'l' , 'м' => 'm', 'н' => 'n', 'о' => 'o' , 'п' => 'p' , 'р' => 'r' , 'с' => 's', 'т' => 't', 'у' => 'u' , 'ф' => 'f' , 'х' => 'kh', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'shh', 'ъ' => '"' , 'ы' => 'y', 'ь' => '_', 'э' => 'eh', 'ю' => 'ju' , 'я' => 'ja', ' ' => '_');
+	$key = array_keys($arr);
+	$val = array_values($arr);
+	$translate = str_replace($key, $val, $string);
+	return $translate;
+}
+
+public function upload_sert() {
+	$json = array();
+	if (!empty($this->request->files['file']['name'])){
+		$filename = $this->transform($this->request->files['file']['name']);
+		if ((utf8_strlen($filename) < 3) || (utf8_strlen($filename) > 1000)) {
+			$json['error'] = $this->language->get('error_filename');
+		}
+		if ($this->request->files['file']['error'] != UPLOAD_ERR_OK) {
+			$json['error'] = $this->language->get('error_upload_' . $this->request->files['file']['error']);
+		}
+	} else {
+		$json['error'] = $this->language->get('error_upload');
+	}
+
+	if (!isset($json['error'])) {
+		move_uploaded_file($this->request->files['file']['tmp_name'], DIR_IMAGE . "/sertificate/" . $filename);
+		$json['sert'] = $filename;
+		$json['success'] = "Файл загружен успешно!";
+	}
+
+	$this->response->setOutput(json_encode($json));
+}]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="replace"><![CDATA[jan = '" . $this->db->escape($data['jan']) . "',]]>
+			</search>
+			<add><![CDATA[jan = '" . $this->db->escape($data['jan']) . "', sert = '" . $this->db->escape($data['sert']) . "',]]>
+			</add>
+		</operation>
+	</file>
+<!--ссылка на скачивание + атрибут download-->	
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation>
+			<search position="before"><![CDATA[<div id="tabs" class="htabs"><a href="#tab-description"><?php echo $tab_description; ?></a>]]>
+			</search>
+			<add><![CDATA[<?php if($sert){ ?><div style="margin-bottom:10px;"><a href="image/sertificate/<?php echo $sert; ?>" download><img src="image/sertificat.png" /> Скачать сертификат</a></div><?php } ?>]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="before"><![CDATA[$this->data['options'] = array();]]>
+			</search>
+			<add><![CDATA[$this->data['sert'] = $product_info['sert'];]]>
+			</add>
+		</operation>
+	</file>
+				
+	<file name="catalog/model/catalog/product.php">
+		<operation>
+			<search position="after"><![CDATA['jan'              => $query->row['jan'],]]>
+			</search>
+			<add><![CDATA['sert'              => $query->row['sert'],]]>
+			</add>
+		</operation>
+	</file>
+</modification>

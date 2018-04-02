@@ -1,0 +1,92 @@
+#qebar, #qenav, .links, .slideshow, .slideshow1, #carousel0, .product-filter, .priceview-add, .share, .tab-related, .noview, #noview .box.statistica, #just-purchased, #callme_button, #abuses, .abuses-view, #tab-attribute, #tab-review {
+	display:none !important;
+}
+
+.noview {
+	display: none !important;
+}
+
+#rh-badge {
+	display:none;
+	max-width:0px;
+}
+
+
+#header .inf {
+	position: absolute;
+	top: 120px;
+	left: 10%;
+	height: 25px;
+	width: 240px;
+	background: url('../image/header6.png') no-repeat;
+}
+
+
+#column-left {
+	display:none;
+
+}
+#column-right {
+	display:none;
+
+}
+#content {
+	min-height: 400px;
+	margin-bottom: 25px;
+	
+	
+}
+#content > p, table, .category-inf, h3, h2 {
+	padding-left:5px;
+	padding-right:5px;
+}
+
+/* content */
+#content .content {
+	padding: 10px;
+	overflow: auto;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	
+}
+#content .content .left {
+	float: left;
+	width: 100%;
+}
+#content .content .right {
+	float: right;
+	width: 100%;
+}
+#column-left + #column-right + #content, #column-left + #content {
+	margin-left: 0px;
+}
+#column-right + #content {
+	margin-right: 0px;
+}
+
+
+#header {
+	height: 150px;
+	display: block;
+    max-width: 100%;
+    margin: 0 auto;
+	background-color: none;
+	position: relative;
+	z-index: 99;
+	text-align:center;
+
+}
+#logo {
+	background:url('../image/logo200.png') no-repeat;
+	width:200px;
+	height:79px;
+	top: 35px;
+	left: 17%;
+
+}
+
+.breadcrumb a {
+color:#fff;
+font-weight:bold;
+}
+
